@@ -14,6 +14,18 @@ module Darstellung
     # @attribute [r] resource The resource being represented.
     attr_reader :resource
 
+    # Gets the detail view for a specific version of the resource. If no
+    # version is provided then we assume from "0.0.0" which will render
+    # attributes available in all versions of the API.
+    #
+    # @example Get the detail representation.
+    #   user_resource.detail("1.0.1")
+    #
+    # @param [ String ] version The version to get of the resource.
+    #
+    # @return [ Hash ] The detail representation of the resource.
+    #
+    # @since 0.0.0
     def detail(version = "0.0.0")
       { version: version, resource: detailed_resource(version) }
     end

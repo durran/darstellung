@@ -53,10 +53,54 @@ describe Darstellung::Representable do
 
     context "when the resource has a versioned definition" do
 
-    end
+      before(:all) do
+        class UserResource
+          include Darstellung::Representable
+          detail :name, from: "1.5.0"
+        end
+      end
 
-    context "when the resource has a block definition" do
+      after(:all) do
+        Object.__send__(:remove_const, :UserResource)
+      end
 
+      let(:user) do
+        User.new("photek")
+      end
+
+      let(:resource) do
+        UserResource.new(user)
+      end
+
+      context "when asking for a valid version" do
+
+        let(:representation) do
+          resource.detail("1.5.0")
+        end
+
+        it "returns the name and value of the attribute" do
+          expect(representation[:resource]).to eq({ name: "photek" })
+        end
+
+        it "returns the requested version" do
+          expect(representation[:version]).to eq("1.5.0")
+        end
+      end
+
+      context "when asking for a version out of range" do
+
+        let(:representation) do
+          resource.detail("1.0.0")
+        end
+
+        it "does not contain the attribute" do
+          expect(representation[:resource]).to be_empty
+        end
+
+        it "returns the requested version" do
+          expect(representation[:version]).to eq("1.0.0")
+        end
+      end
     end
   end
 
