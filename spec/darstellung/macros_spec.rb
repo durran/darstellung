@@ -10,6 +10,9 @@ describe Darstellung::Macros do
         def initialize(name)
           @name = name
         end
+        def long_name
+          "#{name}+"
+        end
       end
     end
 
@@ -45,14 +48,52 @@ describe Darstellung::Macros do
 
     context "when providing a version" do
 
+      before(:all) do
+        class UserResource
+          include Darstellung::Representable
+          detail :name, from: "1.0.0"
+        end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :UserResource)
+      end
+
+      let(:field) do
+        UserResource.detail_attributes[:name]
+      end
+
+      it "allows the field to be displayable by version" do
+        expect(field).to be_displayable("1.0.1")
+      end
     end
 
     context "when providing a block" do
 
+      before(:all) do
+        class UserResource
+          include Darstellung::Representable
+          detail :name do |user|
+            user.long_name
+          end
+        end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :UserResource)
+      end
+
+      let(:user) do
+        User.new("photek")
+      end
+
+      let(:field) do
+        UserResource.detail_attributes[:name]
+      end
+
+      it "allows using the block to get the field value" do
+        expect(field.value(user)).to eq("photek+")
+      end
     end
-  end
-
-  describe "#summary" do
-
   end
 end

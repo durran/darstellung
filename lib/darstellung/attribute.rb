@@ -41,8 +41,10 @@ module Darstellung
     # @param [ Symbol ] name The name of the attribute.
     # @param [ Hash ] options The attribute options.
     #
-    # @option options [ String, Range ] :version The version the attribute
-    #   appears in.
+    # @option options [ String ] :from The version the attribute is available
+    #   from.
+    # @option options [ String ] :to The version the attribute is available
+    #   to.
     #
     # @since 0.0.0
     def initialize(name, options = {}, &block)
