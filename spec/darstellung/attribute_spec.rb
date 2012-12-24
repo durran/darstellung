@@ -130,6 +130,9 @@ describe Darstellung::Attribute do
         def initialize(name)
           @name = name
         end
+        def long_name
+          "#{name}+"
+        end
       end
     end
 
@@ -152,14 +155,24 @@ describe Darstellung::Attribute do
       end
 
       it "sends the method to the resource" do
-
+        expect(value).to eq("photek")
       end
     end
 
     context "when a block was provided" do
 
-      it "yields to the resource" do
+      let(:attribute) do
+        described_class.new(:name) do |user|
+          user.long_name
+        end
+      end
 
+      let(:value) do
+        attribute.value(user)
+      end
+
+      it "yields to the resource" do
+        expect(value).to eq("photek+")
       end
     end
   end

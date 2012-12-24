@@ -9,7 +9,8 @@ module Darstellung
 
     # @attribute [r] name The name of the attribute.
     # @attribute [r] options The attribute options.
-    attr_reader :name, :options
+    # @attribute [r] block The block to call to get the value.
+    attr_reader :name, :options, :block
 
     # Determines if the attribute is displayable in the representation given
     # the provided version.
@@ -44,12 +45,22 @@ module Darstellung
     #   appears in.
     #
     # @since 0.0.0
-    def initialize(name, options = {})
-      @name, @options = name, options
+    def initialize(name, options = {}, &block)
+      @name, @options, @block = name, options, block
     end
 
+    # Get the value for the attribute from the provided resource.
+    #
+    # @example Get the value for the attribute.
+    #   attribute.value(user)
+    #
+    # @param [ Object ] resource The resource to execute on.
+    #
+    # @return [ Object ] The value of the resource.
+    #
+    # @since 0.0.0
     def value(resource)
-      resource.__send__(name)
+      block ? block.call(resource) : resource.__send__(name)
     end
 
     private
