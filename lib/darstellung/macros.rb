@@ -7,12 +7,21 @@ module Darstellung
   # @since 0.0.0
   module Macros
 
-    def detail
+    def detail(name, options = {})
+      normalized = name.to_sym
+      detail_attributes[normalized] = Attribute.new(normalized)
+    end
+
+    def detail_attributes
+      @detail_attributes ||= {}
+    end
+
+    def summary(name, options = {})
 
     end
 
-    def summary
-
+    def summary_attributes
+      @summary_attributes ||= {}
     end
   end
 end

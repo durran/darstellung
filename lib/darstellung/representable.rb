@@ -1,4 +1,5 @@
 # encoding: utf-8
+require "darstellung/attribute"
 require "darstellung/macros"
 
 module Darstellung
@@ -12,6 +13,10 @@ module Darstellung
 
     # @attribute [r] resource The resource being represented.
     attr_reader :resource
+
+    def detail(version = "0.0.0")
+      { version: version, resource: detailed_resource(version) }
+    end
 
     # Initialize the new representation with the provided resource.
     #
@@ -27,6 +32,22 @@ module Darstellung
     # @since 0.0.0
     def initialize(resource)
       @resource = resource
+    end
+
+    private
+
+    def detail_attributes
+      self.class.detail_attributes
+    end
+
+    def detailed_resource(version)
+      representation = {}
+      detail_attributes.each_pair do |name, attribute|
+        if attribute.displayable?(version)
+          representation[name] = attribute.value(resource)
+        end
+      end
+      representation
     end
 
     class << self
