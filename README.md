@@ -84,13 +84,13 @@ resource.summary("2.0.0")
 
 resource = UserResource.new([ user_one, user_two ])
 resource.collection("2.0.0")
-  #=> {
-    version: "2.0.0",
-    resource: [
-      { username: "john", created_at: "2012-1-1" },
-      { username: "joe", created_at: "2012-1-2" }
-    ]
-  }
+  # => {
+  #   version: "2.0.0",
+  #   resource: [
+  #     { username: "john", created_at: "2012-1-1" },
+  #     { username: "joe", created_at: "2012-1-2" }
+  #   ]
+  # }
 ```
 
 Reasoning
