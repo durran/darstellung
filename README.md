@@ -1,6 +1,49 @@
 Darstellung [![Build Status](https://secure.travis-ci.org/durran/darstellung.png?branch=master&.png)](http://travis-ci.org/durran/darstellung) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/durran/darstellung)
 ========
 
+Darstellung
+-----------
+
+Darstellung is a simple DSL for defining what should be displayed in
+resource representations most of the time in API consumption.
+
+Usage
+-----
+
+Say we have a `UserResource` that is responsible for returning
+representations of `User` models. With Darstellung, we tell it what
+fields to display in a "detail" representation and in a "summary"
+representation:
+
+```ruby
+class UserResource
+  include Darstellung::Representable
+
+  summary :username
+
+  detail :first_name
+  detail :last_name
+end
+```
+
+Then we can initialize a new `UserResource` with a single `User` and ask for
+the hash representation back:
+
+```ruby
+resource = UserResource.new(user)
+resource.detail #=> { version: "none", resource: { first_name: "john", last_name: "doe" }}
+resource.summary #=> { version: "none", resource: { username: "john" }}
+```
+
+If we provide the `UserResource` with an `Enumerable` of `User`s, we can ask
+for a collection, which returns an array of summary representations for each
+user in the list.
+
+```ruby
+resource = UserResource.new([ user_one, user_two ])
+resource.collection #=> { version: "none", resource: [{ username: "john" }, { username: "joe" }]}
+```
+
 Copyright (c) 2012 Durran Jordan
 
 Permission is hereby granted, free of charge, to any person obtaining
