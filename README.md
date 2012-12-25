@@ -103,6 +103,71 @@ preference would be to use Sinatra or Webmachine in these API cases, there's a g
 [blog post](http://blog.gomiso.com/2011/05/16/if-youre-using-to_json-youre-doing-it-wrong)
 from the authors of RABL discussing how this gets out of hand quickly in Rails.
 
+Speed
+-----
+
+Bypassing Active Model's serialization is going to provide you with a huge
+performance benefit. Let's look at a basic Mongoid model:
+
+```ruby
+class Band
+  include Mongoid::Document
+  field :description, type: String
+  field :formed_on, type: Date
+  field :location, type: String
+  field :genres, type: Array, default: []
+  field :name, type: String
+  field :similarities, type: Array, default: []
+  field :sounds, type: Array, default: []
+  field :website, type: String
+end
+```
+
+Now let's serialize the model to json (using YAJL), 100,000 times:
+
+```ruby
+bench.report do
+  100_000.times do
+    band.to_json
+  end
+end
+```
+```
+     user     system      total        real
+37.150000   0.100000  37.250000 ( 37.250232)
+```
+
+When we create a resource for the `Band` with Darstellung and serialize it
+that way, we get some serious improvement (over 6x faster).
+
+```ruby
+class BandResource
+  include Darstellung::Representable
+  detail :description
+  detail :formed_on
+  detail :location
+  detail :genres
+  detail :name
+  detail :similarities
+  detail :sounds
+  detail :website
+end
+
+bench.report do
+  100_000.times do
+    BandResource.new(band).detail.to_json
+  end
+end
+```
+
+```
+    user     system      total        real
+6.270000   0.010000   6.280000 (  6.277472)
+```
+
+The results are drastically different in the simplest of examples, and expect
+another order of magnitude gain when including relations.
+
 Serialization
 -------------
 
