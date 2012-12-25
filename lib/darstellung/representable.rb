@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "darstellung/attribute"
+require "darstellung/definable"
 require "darstellung/macros"
 
 module Darstellung
@@ -10,6 +11,7 @@ module Darstellung
   #
   # @since 0.0.0
   module Representable
+    include Definable
 
     # @attribute [r] resource The resource being represented.
     attr_reader :resource
@@ -82,19 +84,15 @@ module Darstellung
 
     private
 
-    def detail_attributes
-      self.class.detail_attributes
-    end
-
-    def representation(version, resource)
-      { version: version || "none", resource: resource }
-    end
-
     def multiple(attributes, version, representation = [])
       resource.each do |object|
         representation.push(single(attributes, object, version))
       end
       representation
+    end
+
+    def representation(version, resource)
+      { version: version || "none", resource: resource }
     end
 
     def single(attributes, object, version, representation = {})
@@ -104,10 +102,6 @@ module Darstellung
         end
       end
       representation
-    end
-
-    def summary_attributes
-      self.class.summary_attributes
     end
 
     class << self
