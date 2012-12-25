@@ -2,7 +2,8 @@ Darstellung [![Build Status](https://secure.travis-ci.org/durran/darstellung.png
 ========
 
 Darstellung is a simple DSL for defining what should be displayed in
-resource representations most of the time in API consumption.
+resource representations most of the time in API consumption. The
+library is currently in an experimental phase (pre 1.0.0).
 
 Usage
 -----
