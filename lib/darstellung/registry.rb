@@ -43,6 +43,22 @@ module Darstellung
       registered_versions[version]
     end
 
+    # Validate that the provided version is registered.
+    #
+    # @example Validate the version.
+    #   Darstellung::Registry.validate!("1.0.5")
+    #
+    # @param [ String ] version The version to validate.
+    #
+    # @raise [ NotRegistered ] If the version is not registered.
+    #
+    # @since 0.0.0
+    def validate!(version)
+      unless registered?(version)
+        raise NotRegistered.new("#{version} is not a valid API version.")
+      end
+    end
+
     # Provides a list of all registered versions in the API.
     #
     # @example List all versions.
@@ -54,6 +70,11 @@ module Darstellung
     def versions
       registered_versions.keys
     end
+
+    # Raised when validating a version that does not exist in the registry.
+    #
+    # @since 0.0.0
+    class NotRegistered < Exception; end
 
     private
 
