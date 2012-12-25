@@ -38,16 +38,34 @@ describe Darstellung::Representable do
         UserResource.new(user)
       end
 
-      let(:representation) do
-        resource.detail("1.0.0")
+      context "when providing a version" do
+
+        let(:representation) do
+          resource.detail("1.0.0")
+        end
+
+        it "returns the name and value of the attribute" do
+          expect(representation[:resource]).to eq({ name: "photek" })
+        end
+
+        it "returns the requested version" do
+          expect(representation[:version]).to eq("1.0.0")
+        end
       end
 
-      it "returns the name and value of the attribute" do
-        expect(representation[:resource]).to eq({ name: "photek" })
-      end
+      context "when no version is provided" do
 
-      it "returns the requested version" do
-        expect(representation[:version]).to eq("1.0.0")
+        let(:representation) do
+          resource.detail
+        end
+
+        it "returns the name and value of the attribute" do
+          expect(representation[:resource]).to eq({ name: "photek" })
+        end
+
+        it "defaults the version to 0.0.0" do
+          expect(representation[:version]).to eq("0.0.0")
+        end
       end
     end
 

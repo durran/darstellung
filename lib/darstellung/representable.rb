@@ -21,12 +21,13 @@ module Darstellung
     # @example Get the detail representation.
     #   user_resource.detail("1.0.1")
     #
-    # @param [ String ] version The version to get of the resource.
+    # @param [ String ] requested_version The version to get of the resource.
     #
     # @return [ Hash ] The detail representation of the resource.
     #
     # @since 0.0.0
-    def detail(version = "0.0.0")
+    def detail(requested_version = nil)
+      version = requested_version || "0.0.0"
       { version: version, resource: detailed_resource(version) }
     end
 
