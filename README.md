@@ -1,9 +1,6 @@
 Darstellung [![Build Status](https://secure.travis-ci.org/durran/darstellung.png?branch=master&.png)](http://travis-ci.org/durran/darstellung) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/durran/darstellung)
 ========
 
-Darstellung
------------
-
 Darstellung is a simple DSL for defining what should be displayed in
 resource representations most of the time in API consumption.
 
