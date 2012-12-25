@@ -72,13 +72,47 @@ version specified:
 
 ```ruby
 resource = UserResource.new(user)
-resource.detail("1.0.0") #=> { version: "1.0.0", resource: { first_name: "john" }}
-resource.detail("1.0.5") #=> { version: "1.0.5", resource: { first_name: "john", last_name: "doe" }}
+resource.detail("1.0.0")
+  #=> { version: "1.0.0", resource: { first_name: "john" }}
+resource.detail("1.0.5")
+  #=> { version: "1.0.5", resource: { first_name: "john", last_name: "doe" }}
 
-resource.summary("1.0.0") #=> { version: "1.0.0", resource: { username: "john" }}
-resource.summary("2.0.0") #=> { version: "2.0.0", resource: { username: "john", created_at: "2012-1-1" }}
+resource.summary("1.0.0")
+  #=> { version: "1.0.0", resource: { username: "john" }}
+resource.summary("2.0.0")
+  #=> { version: "2.0.0", resource: { username: "john", created_at: "2012-1-1" }}
+
+resource = UserResource.new([ user_one, user_two ])
+resource.collection("2.0.0")
+  #=> {
+    version: "2.0.0",
+    resource: [
+      { username: "john", created_at: "2012-1-1" },
+      { username: "joe", created_at: "2012-1-2" }
+    ]
+  }
 ```
 
+Reasoning
+---------
+
+This is simply a case of SRP and maintainability. While some may argue against
+SRP in Rails being overkill, I disagree and will simply show examples showing
+the choices and the developer can decide for themselves. Although my personal
+preference would be to use Sinatra or Webmachine in these API cases, there's a good
+[blog post](http://blog.gomiso.com/2011/05/16/if-youre-using-to_json-youre-doing-it-wrong)
+from the authors of RABL discussing how this gets out of hand quickly in Rails.
+
+Serialization
+-------------
+
+Darstellung does not deal in serialization at all. It's only purpose is to
+provide hash representations of your API resources for specific versions. It's
+up to you to call `to_json` or `to_xml` on them, using whatever serialization
+library you want.
+
+License
+-------
 
 Copyright (c) 2012 Durran Jordan
 
