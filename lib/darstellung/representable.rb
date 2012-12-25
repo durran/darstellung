@@ -28,7 +28,7 @@ module Darstellung
     # @since 0.0.0
     def detail(requested_version = nil)
       version = requested_version || "0.0.0"
-      { version: version, resource: detailed_resource(version) }
+      { version: version, resource: single(detail_attributes, version) }
     end
 
     # Initialize the new representation with the provided resource.
@@ -47,20 +47,40 @@ module Darstellung
       @resource = resource
     end
 
+    # Gets the summary view for a specific version of the resource. If no
+    # version is provided then we assume from "0.0.0" which will render
+    # attributes available in all versions of the API.
+    #
+    # @example Get the summary representation.
+    #   user_resource.summary("1.0.1")
+    #
+    # @param [ String ] requested_version The version to get of the resource.
+    #
+    # @return [ Hash ] The summary representation of the resource.
+    #
+    # @since 0.0.0
+    def summary(requested_version = nil)
+      version = requested_version || "0.0.0"
+      { version: version, resource: single(summary_attributes, version) }
+    end
+
     private
 
     def detail_attributes
       self.class.detail_attributes
     end
 
-    def detailed_resource(version)
-      representation = {}
-      detail_attributes.each_pair do |name, attribute|
+    def single(attributes, version, representation = {})
+      attributes.each do |name, attribute|
         if attribute.displayable?(version)
           representation[name] = attribute.value(resource)
         end
       end
       representation
+    end
+
+    def summary_attributes
+      self.class.summary_attributes
     end
 
     class << self
