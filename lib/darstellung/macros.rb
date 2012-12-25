@@ -1,4 +1,6 @@
 # encoding: utf-8
+require "darstellung/registry"
+
 module Darstellung
 
   # This module provides all the class level macros for defining
@@ -130,6 +132,7 @@ module Darstellung
     def create_attribute(name, attributes, options = {}, &block)
       normalized = name.to_sym
       attributes[normalized] = Attribute.new(normalized, options, &block)
+      Registry.register(options)
     end
   end
 end
