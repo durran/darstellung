@@ -41,6 +41,45 @@ resource = UserResource.new([ user_one, user_two ])
 resource.collection #=> { version: "none", resource: [{ username: "john" }, { username: "joe" }]}
 ```
 
+Versioning
+----------
+
+Just like any other piece of software, your application's API is a contract
+for others to use, and changes to this contract should follow a sane and
+predictable pattern. Darstellung handles this by allowing you to specify versions
+in which various attributes are displayed in the detail and summary views.
+Clients can request a specific version of the API and get the expected results
+back at all times. It is expected that the version numbers follow the
+Semantic Versioning Specification in order to maintain some consistency.
+
+Here is a `UserResource` with versioning:
+
+```ruby
+class UserResource
+  include Darstellung::Representable
+
+  summary :username
+  summary :created_at, from: "1.0.1"
+
+  detail :first_name
+  detail :last_name, from: "1.0.5", to: "2.0.0"
+end
+```
+
+If we pass a version to the `detail`, `summary`, and `collection` methods on
+the resource, we will only get back attributes that fall in line with the
+version specified:
+
+```ruby
+resource = UserResource.new(user)
+resource.detail("1.0.0") #=> { version: "1.0.0", resource: { first_name: "john" }}
+resource.detail("1.0.5") #=> { version: "1.0.5", resource: { first_name: "john", last_name: "doe" }}
+
+resource.summary("1.0.0) #=> { version: "1.0.0", resource: { username: "john" }}
+resource.summary("2.0.0) #=> { version: "2.0.0", resource: { username: "john", created_at: "2012-1-1" }}
+```
+
+
 Copyright (c) 2012 Durran Jordan
 
 Permission is hereby granted, free of charge, to any person obtaining
