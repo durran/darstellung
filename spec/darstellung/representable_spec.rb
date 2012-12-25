@@ -90,16 +90,28 @@ describe Darstellung::Representable do
 
       context "when providing a version" do
 
-        let(:representation) do
-          resource.detail("1.0.0")
+        context "when the version is registered" do
+
+          let(:representation) do
+            resource.detail("1.0.0")
+          end
+
+          it "returns the name and value of the attribute" do
+            expect(representation[:resource]).to eq({ name: "photek" })
+          end
+
+          it "returns the requested version" do
+            expect(representation[:version]).to eq("1.0.0")
+          end
         end
 
-        it "returns the name and value of the attribute" do
-          expect(representation[:resource]).to eq({ name: "photek" })
-        end
+        context "when the version is not registered" do
 
-        it "returns the requested version" do
-          expect(representation[:version]).to eq("1.0.0")
+          it "raises an error" do
+            expect {
+              resource.detail("2.1.0")
+            }.to raise_error(Darstellung::Registry::NotRegistered)
+          end
         end
       end
 

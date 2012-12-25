@@ -73,5 +73,14 @@ describe Darstellung::Registry do
         }.to raise_error(Darstellung::Registry::NotRegistered)
       end
     end
+
+    context "when the version is nil" do
+
+      it "does not raise an error" do
+        expect {
+          described_class.validate!(nil)
+        }.to_not raise_error(Darstellung::Registry::NotRegistered)
+      end
+    end
   end
 end

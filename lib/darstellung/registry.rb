@@ -54,7 +54,7 @@ module Darstellung
     #
     # @since 0.0.0
     def validate!(version)
-      unless registered?(version)
+      unless version.nil? || registered?(version)
         raise NotRegistered.new("#{version} is not a valid API version.")
       end
     end

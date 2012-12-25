@@ -92,7 +92,8 @@ module Darstellung
     end
 
     def representation(version, resource)
-      { version: version || "none", resource: resource }
+      Registry.validate!(version)
+      Hash[ version: version || "none", resource: resource ]
     end
 
     def single(attributes, object, version, representation = {})
