@@ -2,6 +2,56 @@ require "spec_helper"
 
 describe Darstellung::Representable do
 
+  describe "#collection" do
+
+    before(:all) do
+      class User
+        attr_reader :name, :country
+        def initialize(name, country)
+          @name, @country = name, country
+        end
+      end
+    end
+
+    after(:all) do
+      Object.__send__(:remove_const, :User)
+    end
+
+    context "when the resource has summary definitions" do
+
+      before(:all) do
+        class UserResource
+          include Darstellung::Representable
+          summary :name
+          summary :country, from: "1.0.0"
+        end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :UserResource)
+      end
+
+      let(:photek) do
+        User.new("photek", "USA")
+      end
+
+      let(:calyx) do
+        User.new("calyx", "UK")
+      end
+
+      let(:resource) do
+        UserResource.new([ photek, calyx ])
+      end
+
+      it "renders the collection of summary representations" do
+        expect(resource.collection[:resource]).to eq([
+          { name: "photek", country: "USA" },
+          { name: "calyx", country: "UK" }
+        ])
+      end
+    end
+  end
+
   describe "#detail" do
 
     before(:all) do
@@ -63,8 +113,8 @@ describe Darstellung::Representable do
           expect(representation[:resource]).to eq({ name: "photek" })
         end
 
-        it "defaults the version to 0.0.0" do
-          expect(representation[:version]).to eq("0.0.0")
+        it "defaults the version to none" do
+          expect(representation[:version]).to eq("none")
         end
       end
     end
@@ -228,8 +278,8 @@ describe Darstellung::Representable do
           expect(representation[:resource]).to eq({ name: "photek" })
         end
 
-        it "defaults the version to 0.0.0" do
-          expect(representation[:version]).to eq("0.0.0")
+        it "defaults the version to none" do
+          expect(representation[:version]).to eq("none")
         end
       end
     end

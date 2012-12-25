@@ -14,6 +14,24 @@ module Darstellung
     # @attribute [r] resource The resource being represented.
     attr_reader :resource
 
+    # Gets the collection view for a specific version of the resource. If no
+    # version is provided then we assume from "0.0.0" which will render
+    # attributes available in all versions of the API.
+    #
+    # @example Get the collection representation.
+    #   user_resource.collection("1.0.1")
+    #
+    # @note The collection representation is a list of summary representations.
+    #
+    # @param [ String ] version The version to get of the resource.
+    #
+    # @return [ Hash ] The collection representation of the resource.
+    #
+    # @since 0.0.0
+    def collection(version = nil)
+      representation(version, multiple(summary_attributes, version))
+    end
+
     # Gets the detail view for a specific version of the resource. If no
     # version is provided then we assume from "0.0.0" which will render
     # attributes available in all versions of the API.
@@ -21,14 +39,13 @@ module Darstellung
     # @example Get the detail representation.
     #   user_resource.detail("1.0.1")
     #
-    # @param [ String ] requested_version The version to get of the resource.
+    # @param [ String ] version The version to get of the resource.
     #
     # @return [ Hash ] The detail representation of the resource.
     #
     # @since 0.0.0
-    def detail(requested_version = nil)
-      version = requested_version || "0.0.0"
-      { version: version, resource: single(detail_attributes, version) }
+    def detail(version = nil)
+      representation(version, single(detail_attributes, resource, version))
     end
 
     # Initialize the new representation with the provided resource.
@@ -54,14 +71,13 @@ module Darstellung
     # @example Get the summary representation.
     #   user_resource.summary("1.0.1")
     #
-    # @param [ String ] requested_version The version to get of the resource.
+    # @param [ String ] version The version to get of the resource.
     #
     # @return [ Hash ] The summary representation of the resource.
     #
     # @since 0.0.0
-    def summary(requested_version = nil)
-      version = requested_version || "0.0.0"
-      { version: version, resource: single(summary_attributes, version) }
+    def summary(version = nil)
+      representation(version, single(summary_attributes, resource, version))
     end
 
     private
@@ -70,10 +86,21 @@ module Darstellung
       self.class.detail_attributes
     end
 
-    def single(attributes, version, representation = {})
+    def representation(version, resource)
+      { version: version || "none", resource: resource }
+    end
+
+    def multiple(attributes, version, representation = [])
+      resource.each do |object|
+        representation.push(single(attributes, object, version))
+      end
+      representation
+    end
+
+    def single(attributes, object, version, representation = {})
       attributes.each do |name, attribute|
         if attribute.displayable?(version)
-          representation[name] = attribute.value(resource)
+          representation[name] = attribute.value(object)
         end
       end
       representation

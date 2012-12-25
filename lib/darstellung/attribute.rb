@@ -30,6 +30,7 @@ module Darstellung
     #
     # @since 0.0.0
     def displayable?(version)
+      return true unless version
       from <= version && version <= to(version)
     end
 
