@@ -75,8 +75,8 @@ resource = UserResource.new(user)
 resource.detail("1.0.0") #=> { version: "1.0.0", resource: { first_name: "john" }}
 resource.detail("1.0.5") #=> { version: "1.0.5", resource: { first_name: "john", last_name: "doe" }}
 
-resource.summary("1.0.0) #=> { version: "1.0.0", resource: { username: "john" }}
-resource.summary("2.0.0) #=> { version: "2.0.0", resource: { username: "john", created_at: "2012-1-1" }}
+resource.summary("1.0.0") #=> { version: "1.0.0", resource: { username: "john" }}
+resource.summary("2.0.0") #=> { version: "2.0.0", resource: { username: "john", created_at: "2012-1-1" }}
 ```
 
 
