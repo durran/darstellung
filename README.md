@@ -8,11 +8,11 @@ library is currently in an experimental phase (pre 1.0.0).
 Compatibility
 -------------
 
-Mongoid is tested against:
+Darstellung is tested against:
 
-- MRI 1.9.2, 1.9.3, HEAD
-- JRuby 1.7.0, 1.7.1, HEAD
-- Rubinius 2.0.0-rc1
+- MRI: 1.9.2, 1.9.3, HEAD
+- JRuby: 1.7.0, 1.7.1, HEAD
+- Rubinius: 2.0.0-rc1
 
 Usage
 -----
