@@ -1,4 +1,4 @@
-Darstellung [![Build Status](https://secure.travis-ci.org/durran/darstellung.png?branch=master&.png)](http://travis-ci.org/durran/darstellung) [![Code Climate](https://codeclimate.com/github/durran/darstellung.png)](https://codeclimate.com/github/durran/darstellung)
+Darstellung [![Build Status](https://secure.travis-ci.org/durran/darstellung.png?branch=master&.png)](http://travis-ci.org/durran/darstellung) [![Code Climate](https://codeclimate.com/github/durran/darstellung.png)](https://codeclimate.com/github/durran/darstellung) [![Coverage Status](https://coveralls.io/repos/durran/darstellung/badge.png?branch=master)](https://coveralls.io/r/durran/darstellung?branch=master)
 ========
 
 Darstellung is a simple DSL for defining what should be displayed in
