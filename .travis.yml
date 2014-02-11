@@ -6,4 +6,4 @@ rvm:
   - ruby-head
   - jruby
   - jruby-head
-  - rbx-19mode
+  - rbx-2
