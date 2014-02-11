@@ -12,7 +12,7 @@ Darstellung is tested against:
 
 - MRI: 1.9.2, 1.9.3, HEAD
 - JRuby: 1.7.0, 1.7.1, HEAD
-- Rubinius: 2.0.0-rc1
+- Rubinius: 2.2+
 
 Usage
 -----
